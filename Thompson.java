@@ -101,7 +101,7 @@ public class Thompson {
         // Identificando el alfabeto de la expresión regular.
         for (int i = 0; i < expresion_postfix.size(); i++) {
             if (expresion_postfix.get(i).equals("*") || expresion_postfix.get(i).equals(".")
-                    || expresion_postfix.get(i).equals("|")) {
+                    || expresion_postfix.get(i).equals("|") || expresion_postfix.get(i).equals("+") || expresion_postfix.get(i).equals("?")) {
                 continue;
             } else {
                 // Insertando una vez cada caracter del alfabeto.
@@ -152,10 +152,17 @@ public class Thompson {
                         Estado inic = estados_iniciales.pop(); // Estado inicial del autómata.
                         Estado fina = estados_aceptacion.pop(); // Estado final del autómata.
 
-                        // System.out.println("Estado inicial del autómata: " + inic);
-                        // System.out.println("Estado final del autómata: " + fina);
+                        // // System.out.println("Estado inicial del autómata: " + inic);
+                        // // System.out.println("Estado final del autómata: " + fina);
 
                         cerraduraPositiva(inic, fina);
+
+                        // La cerradura positiva se define como L+ = LL*.
+                        // Esto quiere decir que se debe de hacer una concatenación de la expresión con la cerradura kleene de la misma.
+                        //operacion = expresion_postfix.pop(); // Sacando el elemento del stack.
+
+                        System.out.println("Operación CERRADURA POSITIVA.");
+
                         break;
 
                     case "?": // Operación para cero o una instancia de.
@@ -163,14 +170,26 @@ public class Thompson {
                         // System.out.println("Operación CERO O UNA INSTANCIA DE.");
                         operacion = expresion_postfix.pop(); // Sacando la operación del stack.
                         operaciones.push(operacion);
+                        
+                        // Crear una transición de epsilon.
+                        defaultop(simbolo);
 
-                        Estado inicia = estados_iniciales.pop(); // Estado inicial del autómata.
-                        Estado finali = estados_aceptacion.pop(); // Estado final del autómata.
+                        // Si existe un operador ? en la expresión, hacer un OR con un epsilon.
+                        // Sacando los estados.
 
-                        // System.out.println("Estado inicial del autómata: " + inicia);
-                        // System.out.println("Estado final del autómata: " + finali);
+                        // Estados de arriba.
+                        Estado estado_3 = estados_iniciales.pop();
+                        Estado estado_4 = estados_aceptacion.pop();
 
-                        ceroUnaInstancia(inicia, finali);
+                        // Estados de abajo.
+                        Estado estado_1 = estados_iniciales.pop();
+                        Estado estado_2 = estados_aceptacion.pop();
+
+                        // Viendo las transiciones.
+                        System.out.println("Transiciones: " + transiciones);
+
+                        ceroUnaInstancia(estado_1, estado_2, estado_3, estado_4);
+
 
                         break;
 
@@ -200,13 +219,15 @@ public class Thompson {
 
                         // Se agarra el estado inicial y de aceptación de la expresión de arriba del
                         // barco.
-                        Estado inicio_arriba = estados_iniciales.pop();
-                        Estado aceptacion_arriba = estados_aceptacion.pop();
+                        Estado inicio_abajo = estados_iniciales.pop();
+                        Estado aceptacion_abajo = estados_aceptacion.pop();
 
                         // Se agarra el estado inicial y de aceptación de la expresión de abajo del
                         // barco.
-                        Estado inicio_abajo = estados_iniciales.pop();
-                        Estado aceptacion_abajo = estados_aceptacion.pop();
+                        Estado inicio_arriba = estados_iniciales.pop();
+                        Estado aceptacion_arriba = estados_aceptacion.pop();
+
+                        System.out.println("Transiciones: " + transiciones);
 
                         // Se manda a hacer la expresión en su método.
                         union(inicio_arriba, aceptacion_arriba, inicio_abajo, aceptacion_abajo);
@@ -307,7 +328,7 @@ public class Thompson {
 
         // Transición del nuevo estado inicial al nuevo estado de aceptación del
         // autómata.
-        Transiciones transicion3 = new Transiciones(nuevo_inicio, nuevo_fin, simbolo);
+        Transiciones transicion3 = new Transiciones(dos, uno, simbolo);
 
         // Agregando las nuevas transiciones.
         transiciones.add(transicion1);
@@ -320,29 +341,30 @@ public class Thompson {
         estados_aceptacion2.push(nuevo_fin); // Guardando el estado de aceptación en un Stack diferente.
     }
 
-    private void ceroUnaInstancia(Estado uno, Estado dos) { // Método para hcer el método de cero o una instancia.
+    private void ceroUnaInstancia(Estado inicio_arriba, Estado aceptacion_arriba, Estado inicio_abajo, Estado aceptacion_abajo) { // Método para hcer el método de cero o una instancia.
 
         // Creando dos estados nuevos. Uno inicial y otro final.
         Estado nuevo_inicio = new Estado(estados);
         Estado nuevo_fin = new Estado(estados);
 
-        // Creando las nuevas transiciones para el automata.
-        // Nuevo estado inicial. Se conecta el nuevo estado inicial con el estado
-        // inicial viejo.
-        Transiciones transicion1 = new Transiciones(nuevo_inicio, uno, simbolo);
+        System.out.println("Estados: " + inicio_arriba + " " + aceptacion_arriba + " " + inicio_abajo + " " + aceptacion_abajo);
 
-        // Nuevo estado final. Se conecta el viejo estado de acetpación con el nuevo
-        // estado de aceptación.
-        Transiciones transicion2 = new Transiciones(dos, nuevo_fin, simbolo);
+        // Transiciones de arriba.
+        Transiciones transicion1_arriba = new Transiciones(nuevo_inicio, inicio_arriba, simbolo);
+        Transiciones transicion2_arriba = new Transiciones(aceptacion_arriba, nuevo_fin, simbolo);
+        
+        // Transiciones de abajo.
+        Transiciones transicion1_abajo = new Transiciones(nuevo_inicio, inicio_abajo, simbolo);
+        Transiciones transicion2_abajo = new Transiciones(aceptacion_abajo, nuevo_fin, simbolo);
+        
+        // Agregando las transiciones a la lista de transiciones.
+        // Transiciones de arriba.
+        transiciones.add(transicion1_arriba);
+        transiciones.add(transicion2_arriba);
 
-        // Transición del nuevo estado inicial al nuevo estado de aceptación del
-        // autómata.
-        Transiciones transicion3 = new Transiciones(nuevo_inicio, nuevo_fin, simbolo);
-
-        // Agregando las nuevas transiciones.
-        transiciones.add(transicion1);
-        transiciones.add(transicion2);
-        transiciones.add(transicion3);
+        // Transiciones de abajo.
+        transiciones.add(transicion1_abajo);
+        transiciones.add(transicion2_abajo);
 
         // Agregando los nuevos estados al Stack de estados iniciales y de aceptación.
         estados_iniciales.push(nuevo_inicio);
@@ -356,6 +378,8 @@ public class Thompson {
         // Se crea un nuevo estado inicial y uno de aceptación.
         Estado nuevo_inicio = new Estado(estados);
         Estado nuevo_fin = new Estado(estados);
+
+        System.out.println("Estados: " + inicio_arriba + " " + aceptacion_arriba + " " + inicio_abajo + " " + aceptacion_abajo);
 
         // Creando las nuevas transiciones para el automata.
 
@@ -563,10 +587,10 @@ public class Thompson {
         }
     }
 
-    // Método para poder simular el autómata cuando ya esté armado.
-    public void simulation(Estado aceptacion) {
-        System.out.println("Ingrese la cadena a evaluar: ");
+    // // Método para poder simular el autómata cuando ya esté armado.
+    // public void simulation(Estado aceptacion) {
+    //     System.out.println("Ingrese la cadena a evaluar: ");
 
-    }
+    // }
 }
 

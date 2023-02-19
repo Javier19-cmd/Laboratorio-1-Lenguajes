@@ -1,0 +1,24 @@
+        // Aplicamos la identidad L+ = L.L*, en caso de que sea un caracter único.
+        if (res.length() == 2) {
+            res2 = res.toString().trim();
+            reg = "([a-zA-Z0-9])\\+";
+            repm = "$1.$1*";
+
+            System.out.println("Le" + res2.length());
+        } 
+        
+        if (res.length() > 2){
+            // En caso de que se tenga una expresión (LR)+ se debe convertir a (L.R).(L.R)*
+
+            // Primero se busca la expresión (LR)+ y se reemplaza por (L.R).
+            res2 = res.toString().trim();
+            reg = "\\(([a-zA-Z0-9])([a-zA-Z0-9])\\)\\+";
+            repm = "($1.$2)";
+
+            // Luego se busca la expresión (L.R) y se reemplaza por (L.R).(L.R)*
+            res2 = res2.replaceAll(reg, repm);
+            reg = "\\(([a-zA-Z0-9])([a-zA-Z0-9])\\)";
+            repm = "($1.$2).($1.$2)*";
+
+            System.out.println("Len " + res2.length());
+        }

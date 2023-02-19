@@ -17,6 +17,7 @@ public class regex {
         map.put('?', 4);
         map.put('*', 4);
         map.put('+', 4);
+        map.put('^', 5);
         precedenceMap = Collections.unmodifiableMap(map);
     };
 
@@ -54,6 +55,9 @@ public class regex {
             }
         }
         res += regex.charAt(regex.length() - 1);
+
+        // // Aplicamos la identidad L+ = L.L*
+        // String newOutput = res.toString().replaceAll("(\\w)\\+", "$1.$1*").replaceAll("\\((\\w\\.\\w)\\)\\+", "($1.$1)*");
 
         return res;
     }

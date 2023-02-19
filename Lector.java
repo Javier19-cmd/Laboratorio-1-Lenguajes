@@ -50,7 +50,7 @@ public class Lector {
 
 
         // Simulando el AFN construído.
-        thompson.simulation(aceptacion);
+        //thompson.simulation(aceptacion);
 
     }
 }

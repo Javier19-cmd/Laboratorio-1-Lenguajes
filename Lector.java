@@ -1,3 +1,11 @@
+/**
+ * Nombre: Javier Valle 
+ * Carnet: 20159
+ * Fecha: 18/02/2023
+ * Clase Lector.
+ */
+
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -8,6 +16,7 @@ public class Lector {
         Scanner teclado = new Scanner(System.in);
         regex postfix = new regex(); // Instanciando la clase regex para pasar a postfix la expresión regular.
         Thompson thompson = new Thompson(); // Instanciando la clase Thompson para crear el AFN.
+        Errores errores = new Errores(); // Instanciando la clase Errores para verificar errores en la expresión regular.
 
         String r = "";
 
@@ -16,41 +25,47 @@ public class Lector {
         String post_value = postfix.evaluar(r); // pasar a postfix la expresión regular
         System.out.println("Valor postfix: " + post_value);
 
-        thompson.post(post_value); // Mando a evaluar la expresión regular.
+        // Enviando la expresión regular al archivo que se encarga de verificar errores.
+        int err = errores.deteccion(r);
 
-        thompson.escribirArchivo(); // Escribir el archivo de salida.
+        System.out.println("Valor err: " + err);
 
-        // Haciendo el getter de la lista de transiciones.
-        List<Transiciones> tr = thompson.getTransiciones();
+        if (err == 1) {
+            // Creando el AFN.
+            thompson.post(post_value); // Mando a evaluar la expresión regular.
 
-        // System.out.println("Transiciones: " + tr);
+            thompson.escribirArchivo(); // Escribir el archivo de salida.
 
-        Estado inicial = thompson.getEstadoInicial(); // Obteniendo el estado inicial.
+            // Haciendo el getter de la lista de transiciones.
+            List<Transiciones> tr = thompson.getTransiciones();
 
-        // System.out.println("Estado inicial: " + inicial);
+            // System.out.println("Transiciones: " + tr);
 
-        // Haciendo el getter de la lista de estados iniciales.
-        List<Estado> estadosIniciales = thompson.getEstados_iniciales();
+            Estado inicial = thompson.getEstadoInicial(); // Obteniendo el estado inicial.
 
-        // Haciendo el getter de la lista de estados finales.
-        List<Estado> estadosFinales = thompson.getEstados_aceptacion();
+            // System.out.println("Estado inicial: " + inicial);
 
-        // System.out.println("Estados inicial: " + estadosIniciales);
+            // Haciendo el getter de la lista de estados iniciales.
+            List<Estado> estadosIniciales = thompson.getEstados_iniciales();
 
-        // System.out.println("Estados finales: " + estadosFinales);
+            // Haciendo el getter de la lista de estados finales.
+            List<Estado> estadosFinales = thompson.getEstados_aceptacion();
 
-        // Haciendo getter de los símbolos del alfabeto.
-        ArrayList<String> alfabeto = thompson.getAlfabeto();
+            // System.out.println("Estados inicial: " + estadosIniciales);
 
-        // Haciendo getter de los estados.
-        Stack<Estado> estados = thompson.getEstadoss();
+            // System.out.println("Estados finales: " + estadosFinales);
 
-        // Haciendo el getter del estado de aceptación.
-        Estado aceptacion = thompson.getEstadoAceptacion();
+            // Haciendo getter de los símbolos del alfabeto.
+            ArrayList<String> alfabeto = thompson.getAlfabeto();
 
+            // Haciendo getter de los estados.
+            Stack<Estado> estados = thompson.getEstadoss();
 
-        // Simulando el AFN construído.
-        //thompson.simulation(aceptacion);
+            // Haciendo el getter del estado de aceptación.
+            Estado aceptacion = thompson.getEstadoAceptacion();
+        } else {
+            System.out.println("Expresión regular incorrecta.");
+        }
 
     }
 }

@@ -1,13 +1,24 @@
+/**
+ * Nombre: Javier Valle
+ * Carnet: 20159
+ * Fecha: 18/02/2023
+ * 
+ * Clase Thompson.
+ */
+
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 public class Thompson {
 
     // Definiendo el símbolo para las transiciones.
-    public String simbolo = "&";
+    public String simbolo = "ε";
 
     // Definiendo la variable que va a llevar la contabilidad de los estados.
     public static int estados = 0;
@@ -586,6 +597,11 @@ public class Thompson {
             System.out.println("Error al escribir el archivo.");
         }
     }
+
+
+    // Método para dibujar el autómata.
+    
+    
 
     // // Método para poder simular el autómata cuando ya esté armado.
     // public void simulation(Estado aceptacion) {

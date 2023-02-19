@@ -1,3 +1,12 @@
+/**
+ * Nombre: Javier Valle 
+ * Carnet: 20159
+ * Fecha: 18/02/2023
+ * 
+ * Clase Thompson.
+ */
+
+
 import java.lang.reflect.Array;
 import java.util.*;
 

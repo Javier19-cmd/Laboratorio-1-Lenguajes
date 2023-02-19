@@ -1,3 +1,11 @@
+/**
+ * Nombre: Javier Valle
+ * Carnet: 20159
+ * Fecha: 18/02/2023
+ * 
+ * Clase Estado.
+ */
+
 import java.util.*; // Importando todas las librerías para evitar problemas.
 
 public class Estado { // Clase estado, esta se va a encargar de guardar los estados del AFN.

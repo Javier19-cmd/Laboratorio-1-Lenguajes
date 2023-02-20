@@ -172,7 +172,7 @@ public class Thompson {
                         // Esto quiere decir que se debe de hacer una concatenación de la expresión con la cerradura kleene de la misma.
                         //operacion = expresion_postfix.pop(); // Sacando el elemento del stack.
 
-                        System.out.println("Operación CERRADURA POSITIVA.");
+                        //System.out.println("Operación CERRADURA POSITIVA.");
 
                         break;
 
@@ -197,7 +197,7 @@ public class Thompson {
                         Estado estado_2 = estados_aceptacion.pop();
 
                         // Viendo las transiciones.
-                        System.out.println("Transiciones: " + transiciones);
+                        //System.out.println("Transiciones: " + transiciones);
 
                         ceroUnaInstancia(estado_1, estado_2, estado_3, estado_4);
 
@@ -238,7 +238,7 @@ public class Thompson {
                         Estado inicio_arriba = estados_iniciales.pop();
                         Estado aceptacion_arriba = estados_aceptacion.pop();
 
-                        System.out.println("Transiciones: " + transiciones);
+                        //System.out.println("Transiciones: " + transiciones);
 
                         // Se manda a hacer la expresión en su método.
                         union(inicio_arriba, aceptacion_arriba, inicio_abajo, aceptacion_abajo);
@@ -259,7 +259,6 @@ public class Thompson {
         // for (int i = 0; i < transiciones.size(); i++) {
         // System.out.println(transiciones.get(i).toString());
         // }
-
         setEstadoInicial_y_Final();
 
     }
@@ -358,7 +357,7 @@ public class Thompson {
         Estado nuevo_inicio = new Estado(estados);
         Estado nuevo_fin = new Estado(estados);
 
-        System.out.println("Estados: " + inicio_arriba + " " + aceptacion_arriba + " " + inicio_abajo + " " + aceptacion_abajo);
+        //System.out.println("Estados: " + inicio_arriba + " " + aceptacion_arriba + " " + inicio_abajo + " " + aceptacion_abajo);
 
         // Transiciones de arriba.
         Transiciones transicion1_arriba = new Transiciones(nuevo_inicio, inicio_arriba, simbolo);
@@ -390,7 +389,7 @@ public class Thompson {
         Estado nuevo_inicio = new Estado(estados);
         Estado nuevo_fin = new Estado(estados);
 
-        System.out.println("Estados: " + inicio_arriba + " " + aceptacion_arriba + " " + inicio_abajo + " " + aceptacion_abajo);
+        //System.out.println("Estados: " + inicio_arriba + " " + aceptacion_arriba + " " + inicio_abajo + " " + aceptacion_abajo);
 
         // Creando las nuevas transiciones para el automata.
 
@@ -443,10 +442,12 @@ public class Thompson {
                 // Obteniendo el simbolo de la transición.
                 String s = transicion.getSimbolo();
 
-                System.out.println(s);
+                //System.out.println(s);
 
                 // Eliminando la transición del segundo autómata.
                 transiciones.remove(transicion);
+
+                // Reordenando los estados.
 
                 // Creando una transición a los siguientes estados del segundo automata.
                 Transiciones tr = new Transiciones(elemento1, transicion.getA(), s);
@@ -599,8 +600,23 @@ public class Thompson {
     }
 
 
-    // Método para dibujar el autómata.
-    
+    // Método para ordenar los estados.
+    public void ordenarEstados() {
+        // Ordenando los estados empezando por el estado inicial.
+        Collections.sort(estados_aceptacion, new Comparator<Estado>() {
+            @Override
+            public int compare(Estado o1, Estado o2) {
+                return o1.getId() == o2.getId() ? 0 : o1.getId() < o2.getId() ? -1 : 1;
+            }
+        });
+
+        Collections.sort(estados_iniciales, new Comparator<Estado>() {
+            @Override
+            public int compare(Estado o1, Estado o2) {
+                return o1.getId() == o2.getId() ? 0 : o1.getId() < o2.getId() ? -1 : 1;
+            }
+        });
+    }
     
 
     // // Método para poder simular el autómata cuando ya esté armado.

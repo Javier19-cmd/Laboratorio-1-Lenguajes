@@ -29,7 +29,11 @@ public class Errores {
                         //System.out.println("Error: Paréntesis sin cerrar.");
                         error = 0;
                         break;
-                    }
+                    } // Verificando que en la expresión regular hayan letras.
+                    else if (regex.charAt(j) >= 'a' && regex.charAt(j) <= 'z') {
+                        error = 1;
+                    } else if (regex.charAt(j) >= 'A' && regex.charAt(j) <= 'Z') {
+                        error = 1;
                 }
             }
         }
